@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrom Board</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        #carrom-board {
+            width: 400px;
+            height: 400px;
+            border: 2px solid #000;
+            border-radius: 50%;
+            position: relative;
+            background-color: #ffebcd;
+        }
+        #striker {
+            width: 20px;
+            height: 20px;
+            background-color: #000;
+            border-radius: 50%;
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+    <div id="carrom-board">
+        <div id="striker"></div>
+    </div>
+
+    <script>
+        const carromBoard = document.getElementById('carrom-board');
+        const striker = document.getElementById('striker');
+        
+        let isStrikerMoving = false;
+
+        carromBoard.addEventListener('mousedown', () => {
+            isStrikerMoving = true;
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (isStrikerMoving) {
+                const boardRect = carromBoard.getBoundingClientRect();
+                const mouseX = e.clientX - boardRect.left;
+                const mouseY = e.clientY - boardRect.top;
+
+                // Ensure the striker stays inside the board
+                const maxX = carromBoard.clientWidth - striker.clientWidth;
+                const maxY = carromBoard.clientHeight - striker.clientHeight;
+                
+                const x = Math.min(maxX, Math.max(0, mouseX - striker.clientWidth / 2));
+                const y = Math.min(maxY, Math.max(0, mouseY - striker.clientHeight / 2));
+
+                striker.style.left = x + 'px';
+                striker.style.top = y + 'px';
+            }
+        });
+
+        document.addEventListener('mouseup', () => {
+            isStrikerMoving = false;
+        });
+    </script>
+</body>
+</html>
